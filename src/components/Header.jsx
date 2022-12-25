@@ -1,28 +1,29 @@
 import { NavLink } from "react-router-dom";
 import styles from "./css/header.module.css";
+import { AiOutlineHome, AiOutlineMenu, AiOutlineMessage } from "react-icons/ai";
 
 export default function Header() {
   return (
-    <div id={styles.header}>
+    <div className={styles.header}>
       <NavLink
         to="/"
         className={(navinfo) => (navinfo.isActive ? styles.active : styles.tab)}
       >
-        Feeds
+        <AiOutlineHome size="25" />
       </NavLink>
       <NavLink
         to="/messages"
         className={(navinfo) => (navinfo.isActive ? styles.active : styles.tab)}
         style={{ borderLeft: "0px" }}
       >
-        Messages
+        <AiOutlineMessage size="25" />
       </NavLink>
       <NavLink
         to="/menu"
         className={(navinfo) => (navinfo.isActive ? styles.active : styles.tab)}
         style={{ borderLeft: "0px" }}
       >
-        Menu
+        <AiOutlineMenu size="25" />
       </NavLink>
     </div>
   );
