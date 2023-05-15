@@ -1,7 +1,11 @@
+import { useAuth } from '../../contexts/authContext'
+
+
 function Menu() {
+	const { signUpWithGoogle } = useAuth();
   return (
     <div>
-      <p>Menu is under development</p>
+      <button onClick={ signUpWithGoogle }>Signup</button>
     </div>
   );
 }
