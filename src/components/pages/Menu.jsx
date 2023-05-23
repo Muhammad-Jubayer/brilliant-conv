@@ -18,6 +18,7 @@ function Menu() {
   return (
     <div>
       <button
+        onClick={handleGoogleSignIn}
         style={{
           padding: "10px",
           fontSize: "15px",
