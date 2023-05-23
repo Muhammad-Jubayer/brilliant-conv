@@ -1,11 +1,30 @@
-import { useAuth } from '../../contexts/authContext'
-
+import { auth, googleProvider } from "../../firebase";
 
 function Menu() {
-	const { signUpWithGoogle } = useAuth();
+  const handleGoogleSignIn = () => {
+    auth
+      .signInWithPopup(googleProvider)
+      .then((result) => {
+        // Handle successful sign-in
+        const user = result.user;
+        console.log("Signed in user:", user);
+      })
+      .catch((error) => {
+        // Handle sign-in error
+        console.error("Error signing in:", error);
+      });
+  };
+
   return (
     <div>
-      <button onClick={ signUpWithGoogle }>Signup</button>
+      <button
+        style={{
+          padding: "10px",
+          fontSize: "15px",
+        }}
+      >
+        Sign in with Google
+      </button>
     </div>
   );
 }

@@ -9,7 +9,7 @@ export default function Messages() {
       <Message
         img={img}
         name={"Jubayer"}
-        lastMsg="Lsta messaga"
+        lastMsg="Last Message"
         time="10:00 PM"
       />
     </>
