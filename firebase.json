@@ -1,9 +1,12 @@
 {
-  "database": {
-    "rules": "database.rules.json"
-  },
-	"hosting": {
-    "site": "js-online-chat-app",
-    "public": "public"
+  "hosting": {
+    "public": "~/views/build",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
   }
 }
