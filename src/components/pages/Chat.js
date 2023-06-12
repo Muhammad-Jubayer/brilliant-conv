@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import "../css/chatStyle.module.css";
+import chatStyle from "../css/chatStyle.module.css";
 
 const ChatPage = () => {
   const [messages, setMessages] = useState([]);
@@ -30,20 +30,22 @@ const ChatPage = () => {
   }, [messages]);
 
   return (
-    <div className="chat-container">
-      <div className="message-list" ref={messageListRef}>
+    <div className={chatStyle["chat-container"]}>
+      <div className={chatStyle["message-list"]} ref={messageListRef}>
         {messages.map((message) => (
           <div
             key={message.id}
-            className={`message ${
-              message.isUserMessage ? "user-message" : "other-user-message"
+            className={`${chatStyle.message} ${
+              message.isUserMessage
+                ? chatStyle["user-message"]
+                : chatStyle["other-user-message"]
             }`}
           >
             {message.text}
           </div>
         ))}
       </div>
-      <form className="input-form" onSubmit={handleSubmit}>
+      <form className={chatStyle["input-form"]} onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Type a message..."
