@@ -1,9 +1,10 @@
 import { useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
 import { NavLink } from "react-router-dom";
 
-import { token } from "../authInfo";
-
 const SignUp = () => {
+  const { signup } = useAuth();
+
   const [formValue, setFormValue] = useState({
     name: "",
     email: "",
@@ -16,23 +17,9 @@ const SignUp = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Send form data to the backend
-    fetch("http://localhost:3400/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formValue),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // Process the response from the backend
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    signup(formValue.email, formValue.password, formValue.name);
   };
+
   return (
     <>
       <form className="Signup" onSubmit={handleSubmit}>
@@ -72,6 +59,8 @@ const SignUp = () => {
 };
 
 function SignIn() {
+  const { login } = useAuth();
+
   const [formValue, setFormValue] = useState({
     email: "",
     password: "",
@@ -80,28 +69,10 @@ function SignIn() {
   const handleChange = (e) => {
     setFormValue({ ...formValue, [e.target.name]: e.target.value });
   };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("fatching");
-    // Send form data to the backend
-    fetch("http://localhost:3400/signin", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formValue),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        // Process the response from the backend
-        token = data.accessToken;
-        console.log(data);
-        console.log(token);
-      })
-      .catch((error) => {
-        console.log("Found error");
-        console.error(error);
-      });
+    login(formValue.email, formValue.password);
   };
 
   return (
@@ -135,8 +106,8 @@ function SignIn() {
 function SignInButton() {
   return (
     <>
-      <NavLink to="/signup">
-        <button style={buttonStyle}>Sign Up</button>
+      <NavLink to="/signin">
+        <button style={buttonStyle}>Sign in</button>
       </NavLink>
     </>
   );
@@ -145,11 +116,16 @@ function SignInButton() {
 function SignUpButton() {
   return (
     <>
-      <NavLink to="/signin">
-        <button style={buttonStyle}>Sign In</button>
+      <NavLink to="/signup">
+        <button style={buttonStyle}>Sign up</button>
       </NavLink>
     </>
   );
+}
+
+function LogoutButton() {
+  const { logout } = useAuth();
+  return <button onClick={() => logout()}>Sign Out</button>;
 }
 
 const buttonStyle = {
@@ -160,4 +136,4 @@ const buttonStyle = {
   border: "1px solid black",
 };
 
-export { SignUp, SignIn, SignInButton, SignUpButton };
+export { SignUp, SignIn, SignInButton, LogoutButton, SignUpButton };

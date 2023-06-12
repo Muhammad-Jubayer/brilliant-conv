@@ -1,0 +1,58 @@
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: relative;
+}
+
+.message-list {
+  flex-grow: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.message {
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  max-width: 70%;
+}
+
+.user-message {
+  align-self: flex-end;
+  background-color: #0084ff;
+  color: white;
+}
+
+.other-user-message {
+  align-self: flex-start;
+  background-color: #f0f0f0;
+}
+
+.input-form {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #f0f0f0;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.input-form input {
+  flex-grow: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 20px;
+  background-color: white;
+}
+
+.input-form button {
+  margin-left: 10px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 20px;
+  background-color: #0084ff;
+  color: white;
+  cursor: pointer;
+}
