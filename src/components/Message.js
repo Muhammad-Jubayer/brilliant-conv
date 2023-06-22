@@ -1,7 +1,6 @@
 import styles from "./css/Message.module.css";
 
 export default function Message({ img, name, lastMsg, time }) {
-  console.log("running");
   return (
     <div className={styles.msg}>
       <img alt="Avater" src={img} className={styles.img} />

@@ -7,6 +7,8 @@ import { useState } from "react";
 import useFetch from "../../hooks/useFetch";
 import logo from "../../assets/me.png";
 import styles from "../css/Message.module.css";
+import { useNavigate } from "react-router-dom";
+import { formatTimestamp } from "../../func";
 
 export default function Home() {
   const { currentUser } = useAuth();
@@ -22,7 +24,8 @@ export default function Home() {
             img={logo}
             name={datac[key].name}
             lastMsg={datac[key].lastMessage.content}
-            time={datac[key].lastMessage.timestamp}
+            time={formatTimestamp(datac[key].lastMessage.timestamp)}
+            id={datac[key].id}
           />
         ))}
     </div>
@@ -52,6 +55,7 @@ function MainHeading() {
           }}
         >
           <p>{currentUser.displayName}</p>
+          <p>{currentUser.uid}</p>
           <LogoutButton />
         </div>
       )}
@@ -90,10 +94,10 @@ function MainHeading() {
   );
 }
 
-function Message({ img, name, lastMsg, time }) {
-  console.log("running");
+function Message({ id, img, name, lastMsg, time }) {
+  const navigate = useNavigate();
   return (
-    <div className={styles.msg}>
+    <div className={styles.msg} onClick={() => navigate(`chat/${id}`)}>
       <img alt="Avatar" src={img} className={styles.img} />
       <div className={styles.msgBox} style={{ paddingLeft: "5px" }}>
         <p>{name}</p>
@@ -109,7 +113,7 @@ function Add() {
   const [enable, setEnable] = useState(false);
 
   const [formValue, setFormValue] = useState({
-    userName: "",
+    userId: "",
     conversationName: "",
   });
   const { currentUser } = useAuth();
@@ -118,37 +122,33 @@ function Add() {
     setFormValue({ ...formValue, [e.target.name]: e.target.value });
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
+    const db = getDatabase();
+    const conversationsRef = ref(db, "conversations");
+    const newConversationRef = push(conversationsRef);
 
-const handleSubmit = (e) => {
-  e.preventDefault();
+    const newConversation = {
+      participants: {
+        [currentUser.uid]: true,
+        [formValue.userId]: true,
+      },
+      name: formValue.conversationName,
+      lastMessage: {
+        senderId: currentUser.uid,
+        content: "",
+        timestamp: 122,
+      },
+    };
 
-  const db = getDatabase();
-  const conversationsRef = ref(db, "conversations");
-  const newConversationRef = push(conversationsRef);
+    // Add the new conversation to the database
+    set(newConversationRef, newConversation);
 
-  const newConversation = {
-  id: newConversationRef.key,
-    participants: {
-      [currentUser.uid]: true,
-      [formValue.userName]: true,
-    },
-    name: formValue.conversationName,
-    lastMessage: {
-      senderId: currentUser.uid,
-      content: "",
-      timestamp: 0,
-    },
+    // Reset the form fields and state
+    setEnable(false);
+    setFormValue({ userId: "", conversationName: "" });
   };
-
-  // Add the new conversation to the database
-  set(newConversationRef, newConversation);
-
-  // Reset the form fields and state
-  setEnable(false);
-  setFormValue({ userName: "", conversationName: "" });
-};
-
 
   const handleCancel = () => {
     setEnable(false);
@@ -164,12 +164,14 @@ const handleSubmit = (e) => {
             onChange={handleChange}
             name="conversationName"
             value={formValue.conversationName}
+            placeholder="Enter conversation's name"
           />
           <input
             type="text"
             onChange={handleChange}
-            name="userName"
-            value={formValue.userName}
+            name="userId"
+            value={formValue.userId}
+            placeholder="Enter participant ID"
           />
           <button onClick={handleSubmit}>Add</button>
           <button onClick={handleCancel}>Cancel</button>

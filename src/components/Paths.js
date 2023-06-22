@@ -14,7 +14,7 @@ export default function Paths() {
     return (
       <Routes>
         <Route exact path="/" element={<Home />} />
-        <Route exact path="/chat" element={<Chat />} />
+        <Route exact path="/chat/:id" element={<Chat />} />
         <Route
           path="*"
           element={
