@@ -1,11 +1,10 @@
 import { useAuth } from "../../contexts/AuthContext";
 import { getDatabase, ref, set, push } from "firebase/database";
-// import { uuidv4 } from "@firebase/util";
 import { LogoutButton, SignInButton, SignUpButton } from "../Authenticate";
 import { MdAdd, MdArrowDropDown, MdArrowDropUp } from "react-icons/md";
 import { useState } from "react";
 import useFetch from "../../hooks/useFetch";
-import logo from "../../assets/me.png";
+import logo from "../../assets/images.jpeg";
 import styles from "../css/Message.module.css";
 import { useNavigate } from "react-router-dom";
 import { formatTimestamp } from "../../func";
@@ -13,6 +12,7 @@ import { formatTimestamp } from "../../func";
 export default function Home() {
   const { currentUser } = useAuth();
   const datac = useFetch("conversations");
+  console.log(datac);
   return currentUser ? (
     <div>
       <MainHeading />
@@ -23,11 +23,12 @@ export default function Home() {
             key={key}
             img={logo}
             name={datac[key].name}
-            lastMsg={datac[key].lastMessage.content}
-            time={formatTimestamp(datac[key].lastMessage.timestamp)}
+            lastMsg={ ""}
+            time={ ""}
             id={datac[key].id}
           />
         ))}
+    
     </div>
   ) : (
     <div>
@@ -138,8 +139,10 @@ function Add() {
       lastMessage: {
         senderId: currentUser.uid,
         content: "",
-        timestamp: 122,
+        timestamp: new Date().toISOString(),
       },
+      timestamp:new  Date().toISOString(),
+      id: newConversationRef.key,
     };
 
     // Add the new conversation to the database

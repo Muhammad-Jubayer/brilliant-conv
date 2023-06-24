@@ -93,7 +93,20 @@ const ChatPage = () => {
           </form>
         </div>
       ) : (
-        <p>Loading...</p>
+        <div>
+          <p>Loading...</p>
+          <form className={chatStyle["input-form"]} onSubmit={handleSubmit}>
+            <input
+              type="text"
+              placeholder="Type a message..."
+              value={inputValue}
+              onChange={handleInputChange}
+            />
+            <button type="submit" onClick={handleSubmit}>
+              Send
+            </button>
+          </form>
+        </div>
       )}
     </div>
   );
