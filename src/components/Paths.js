@@ -6,6 +6,7 @@ import Home from "./pages/Home";
 import { SignIn, SignUp, SignInButton, SignUpButton } from "./Authenticate";
 
 import Chat from "./pages/Chat.js";
+import Profile from "./pages/Profile";
 // import Messages from "./pages/Messages";
 
 export default function Paths() {
@@ -15,6 +16,7 @@ export default function Paths() {
       <Routes>
         <Route exact path="/" element={<Home />} />
         <Route exact path="/chat/:id" element={<Chat />} />
+        <Route exact path="/profile" element={<Profile />} />
         <Route
           path="*"
           element={
@@ -31,6 +33,7 @@ export default function Paths() {
       <Routes>
         <Route exact path="/signup" element={<SignUp />} />
         <Route exact path="/signin" element={<SignIn />} />{" "}
+        <Route exact path="/profile" element={<Profile />} />
         <Route
           path="*"
           element={

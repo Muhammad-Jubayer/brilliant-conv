@@ -5,20 +5,20 @@ import { MdAdd, MdArrowDropDown, MdArrowDropUp } from "react-icons/md";
 import { useState } from "react";
 import useFetch from "../../hooks/useFetch";
 import logo from "../../assets/images.jpeg";
-import styles from "../css/Message.module.css";
+import styles from "../css/home.module.css";
 import { useNavigate } from "react-router-dom";
 import { uuidv4 } from "@firebase/util";
+import Header from "../Header3";
 // import { formatTimestamp } from "../../func";
 
 export default function Home() {
   const { currentUser } = useAuth();
   const datac = useFetch(`users/${currentUser.uid}/conversations`);
-  console.log(datac);
   return currentUser ? (
-    <div>
-      <MainHeading />
+    <div className={styles["container"]}>
+      <Header />
       <Add />
-      {datac &&
+        {datac &&
         Object.keys(datac).map((key) => (
           <Message
             key={key}
@@ -175,7 +175,7 @@ function Add() {
 
   return (
     <div>
-      <MdAdd size="40" onClick={() => setEnable(true)} align="center" />
+      <MdAdd className={styles["add"]}  size="40" onClick={() => setEnable(true)} align="center" />
       {enable && (
         <div>
           <input
