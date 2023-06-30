@@ -41,12 +41,26 @@ const ChatPage = () => {
 
     set(newMsgRef, newMsg);
     setInputValue("");
+
+    setTimeout(() => {
+      if (messageListRef.current) {
+        messageListRef.current.scrollTo({
+          top: messageListRef.current.scrollHeight,
+          behavior: "smooth",
+        });
+      }
+    }, 100);
   };
 
   useEffect(() => {
-    if (messageListRef.current) {
-      messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
-    }
+    setTimeout(() => {
+      if (messageListRef.current) {
+        messageListRef.current.scrollTo({
+          top: messageListRef.current.scrollHeight + 500,
+          behavior: "smooth",
+        });
+      }
+    }, 100);
 
     const db = getDatabase();
     const msgs = query(

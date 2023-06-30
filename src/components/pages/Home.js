@@ -1,5 +1,5 @@
 import { useAuth } from "../../contexts/AuthContext";
-import { getDatabase, ref, set, push } from "firebase/database";
+import { getDatabase, ref, set } from "firebase/database";
 import { LogoutButton, SignInButton, SignUpButton } from "../Authenticate";
 import { MdAdd, MdArrowDropDown, MdArrowDropUp } from "react-icons/md";
 import { useState } from "react";
@@ -7,11 +7,12 @@ import useFetch from "../../hooks/useFetch";
 import logo from "../../assets/images.jpeg";
 import styles from "../css/Message.module.css";
 import { useNavigate } from "react-router-dom";
-import { formatTimestamp } from "../../func";
+import { uuidv4 } from "@firebase/util";
+// import { formatTimestamp } from "../../func";
 
 export default function Home() {
   const { currentUser } = useAuth();
-  const datac = useFetch("conversations");
+  const datac = useFetch(`users/${currentUser.uid}/conversations`);
   console.log(datac);
   return currentUser ? (
     <div>
@@ -23,12 +24,11 @@ export default function Home() {
             key={key}
             img={logo}
             name={datac[key].name}
-            lastMsg={ ""}
-            time={ ""}
+            lastMsg={""}
+            time={""}
             id={datac[key].id}
           />
         ))}
-    
     </div>
   ) : (
     <div>
@@ -111,13 +111,13 @@ function Message({ id, img, name, lastMsg, time }) {
 }
 
 function Add() {
-  const [enable, setEnable] = useState(false);
+  const { currentUser } = useAuth();
 
+  const [enable, setEnable] = useState(false);
   const [formValue, setFormValue] = useState({
     userId: "",
     conversationName: "",
   });
-  const { currentUser } = useAuth();
 
   const handleChange = (e) => {
     setFormValue({ ...formValue, [e.target.name]: e.target.value });
@@ -127,26 +127,42 @@ function Add() {
     e.preventDefault();
 
     const db = getDatabase();
-    const conversationsRef = ref(db, "conversations");
-    const newConversationRef = push(conversationsRef);
+    const uuid = uuidv4();
 
-    const newConversation = {
+    // paths
+    const convPath = `conversations/${uuid}`;
+    const usersConvPath = `users/${currentUser.uid}/conversations/${uuid}`;
+    const otherConvPath = `users/${formValue.userId}/conversations/${uuid}`;
+
+    // refs
+    const convRef = ref(db, convPath);
+    const userConvRef = ref(db, usersConvPath);
+    const otherConvRef = ref(db, otherConvPath);
+
+    // data
+    const newConv = {
       participants: {
         [currentUser.uid]: true,
         [formValue.userId]: true,
       },
+      id: uuid,
+    };
+
+    const newUserConv = {
+      active: true,
       name: formValue.conversationName,
       lastMessage: {
-        senderId: currentUser.uid,
-        content: "",
+        content: "Just created",
         timestamp: new Date().toISOString(),
       },
-      timestamp:new  Date().toISOString(),
-      id: newConversationRef.key,
+      timestamp: new Date().toISOString(),
+      id: uuid,
     };
 
     // Add the new conversation to the database
-    set(newConversationRef, newConversation);
+    set(convRef, newConv);
+    set(userConvRef, newUserConv);
+    set(otherConvRef, newUserConv);
 
     // Reset the form fields and state
     setEnable(false);
@@ -159,7 +175,7 @@ function Add() {
 
   return (
     <div>
-      <MdAdd size="40" onClick={() => setEnable(true)} />
+      <MdAdd size="40" onClick={() => setEnable(true)} align="center" />
       {enable && (
         <div>
           <input
