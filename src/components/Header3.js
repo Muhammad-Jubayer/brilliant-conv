@@ -3,10 +3,13 @@ import headerStyle from "./css/headerStyle.module.css";
 import { MdAccountCircle, MdSettings, MdLogout } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import logo from "../assets/images.jpeg";
+import Demo from "../assets/images.jpeg";
+import useFetch from "../hooks/useFetch";
 
 const Header = () => {
   const { currentUser, logout } = useAuth();
+  const profileUrl = useFetch(`users/${currentUser.uid}/profile-picture`);
+  const logo = profileUrl || Demo;
   const [showProfileInfo, setShowProfileInfo] = useState(false);
 
   const toggleProfileInfo = () => {
@@ -33,7 +36,7 @@ const Header = () => {
 		   <img alt="Avater" src={logo} className={headerStyle["avater"]} />
            <p>{currentUser.displayName}</p>
          </div>
-           <p className={headerStyle["items"]} onClick={() => navigate(`profile`)}>
+           <p className={headerStyle["items"]} onClick={() => navigate(`/profile`)}>
              <MdAccountCircle size="25"/>
              <b>Profile</b>
            </p>

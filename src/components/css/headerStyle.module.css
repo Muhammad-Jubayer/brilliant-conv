@@ -38,6 +38,7 @@
   padding: 10px;
   border-radius: 5px;
   transition: bottom 0.3s ease;
+  animation: open 1s ease;
 }
 
 .profile-info.active {
@@ -72,4 +73,13 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+}
+
+@keyframe open {
+	from {
+		width: 0;
+	}
+	to {
+		width: 300px;
+	}
 }

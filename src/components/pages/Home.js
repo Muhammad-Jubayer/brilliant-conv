@@ -18,7 +18,7 @@ export default function Home() {
     <div className={styles["container"]}>
       <Header />
       <Add />
-        {datac &&
+      {datac &&
         Object.keys(datac).map((key) => (
           <Message
             key={key}
@@ -175,7 +175,12 @@ function Add() {
 
   return (
     <div>
-      <MdAdd className={styles["add"]}  size="40" onClick={() => setEnable(true)} align="center" />
+      <MdAdd
+        className={styles["add"]}
+        size="40"
+        onClick={() => setEnable(true)}
+        align="center"
+      />
       {enable && (
         <div>
           <input

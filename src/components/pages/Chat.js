@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { MdSend } from "react-icons/md";
 import chatStyle from "../css/chatStyle.module.css";
 import {
   onValue,
@@ -101,9 +102,7 @@ const ChatPage = () => {
               value={inputValue}
               onChange={handleInputChange}
             />
-            <button type="submit" onClick={handleSubmit}>
-              Send
-            </button>
+            <MdSend size="40" onClick={handleSubmit} />
           </form>
         </div>
       ) : (
@@ -116,9 +115,7 @@ const ChatPage = () => {
               value={inputValue}
               onChange={handleInputChange}
             />
-            <button type="submit" onClick={handleSubmit}>
-              Send
-            </button>
+            <MdSend size="40" onClick={handleSubmit} />
           </form>
         </div>
       )}
