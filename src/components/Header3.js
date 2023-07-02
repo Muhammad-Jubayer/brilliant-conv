@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import Demo from "../assets/images.jpeg";
 import useFetch from "../hooks/useFetch";
+import Logo from "../assets/b.png";
 
 const Header = () => {
   const { currentUser, logout } = useAuth();
@@ -16,40 +17,49 @@ const Header = () => {
     setShowProfileInfo((prevShowProfileInfo) => !prevShowProfileInfo);
   };
 
- const navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
     <header className={headerStyle["header"]}>
-      <div className={headerStyle["logo"]}>B</div>
+      <div className={headerStyle["logo"]}>
+        <img src={Logo} alt="Logo" onClick={()=> navigate("/")} />
+      </div>
       <span>Chat</span>
-      <div className={headerStyle["user-profile"]} >
+      <div className={headerStyle["user-profile"]}>
         <img
           onClick={toggleProfileInfo}
           className={headerStyle["profile-picture"]}
           src={logo}
-          alt="Profile Picture"
+          alt="Profile"
         />
       </div>
       {showProfileInfo && (
-         <div className={headerStyle["profile-info"]}>
-         <div className={headerStyle["user-info"]}>
-		   <img alt="Avater" src={logo} className={headerStyle["avater"]} />
-           <p>{currentUser.displayName}</p>
-         </div>
-           <p className={headerStyle["items"]} onClick={() => navigate(`/profile`)}>
-             <MdAccountCircle size="25"/>
-             <b>Profile</b>
-           </p>
-           <p className={headerStyle["items"]} onClick={() => navigate(`settings`)}>
-             <MdSettings size="25"/>
-             <b>Settings</b>
-           </p>
-           <p className={headerStyle["items"]} onClick={() => logout()}>
-             <MdLogout size="25" />
-             <b>Log Out</b>
-           </p>
-         </div>
-       )}
+        <div className={headerStyle["profile-info"]}>
+          <div className={headerStyle["user-info"]}>
+            <img alt="Avater" src={logo} className={headerStyle["avater"]} />
+            <p>{currentUser.displayName}</p>
+          </div>
+          <div className={headerStyle["horizontal-line"]}></div>
+          <p
+            className={headerStyle["items"]}
+            onClick={() => navigate(`/profile`)}
+          >
+            <MdAccountCircle size="25" />
+            <b>Profile</b>
+          </p>
+          <p
+            className={headerStyle["items"]}
+            onClick={() => navigate(`settings`)}
+          >
+            <MdSettings size="25" />
+            <b>Settings</b>
+          </p>
+          <p className={headerStyle["items"]} onClick={() => logout()}>
+            <MdLogout size="25" />
+            <b>Log Out</b>
+          </p>
+        </div>
+      )}
     </header>
   );
 };

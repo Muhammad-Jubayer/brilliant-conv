@@ -1,7 +1,7 @@
 import { useAuth } from "../../contexts/AuthContext";
 import { getDatabase, ref, set } from "firebase/database";
-import { LogoutButton, SignInButton, SignUpButton } from "../Authenticate";
-import { MdAdd, MdArrowDropDown, MdArrowDropUp } from "react-icons/md";
+import { SignInButton, SignUpButton } from "../Authenticate";
+import { MdAdd } from "react-icons/md";
 import { useState } from "react";
 import useFetch from "../../hooks/useFetch";
 import logo from "../../assets/images.jpeg";
@@ -9,7 +9,7 @@ import styles from "../css/home.module.css";
 import { useNavigate } from "react-router-dom";
 import { uuidv4 } from "@firebase/util";
 import Header from "../Header3";
-// import { formatTimestamp } from "../../func";
+import formatTimestamp from "../../func";
 
 export default function Home() {
   const { currentUser } = useAuth();
@@ -21,11 +21,11 @@ export default function Home() {
       {datac &&
         Object.keys(datac).map((key) => (
           <Message
-            key={key}
+            key={datac[key].id}
             img={logo}
             name={datac[key].name}
-            lastMsg={""}
-            time={""}
+            lastMsg={"last message demo"}
+            time={formatTimestamp(datac[key]["timestamp"])}
             id={datac[key].id}
           />
         ))}
@@ -40,61 +40,6 @@ export default function Home() {
   );
 }
 
-function MainHeading() {
-  const [contrac, setContrac] = useState(true);
-  const { currentUser } = useAuth();
-  return (
-    <div>
-      {!contrac && (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexDirection: "column",
-            marginBottom: "10px",
-          }}
-        >
-          <p>{currentUser.displayName}</p>
-          <p>{currentUser.uid}</p>
-          <LogoutButton />
-        </div>
-      )}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          flexDirection: "row",
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-          }}
-        >
-          <img src={logo} style={{ margin: "5px" }} height="40px" alt="Logo" />
-          <h6>Brilliant Conversation</h6>
-        </div>
-        {contrac ? (
-          <MdArrowDropDown
-            size="25"
-            color="black"
-            onClick={() => setContrac(false)}
-          />
-        ) : (
-          <MdArrowDropUp
-            size="25"
-            color="black"
-            onClick={() => setContrac(true)}
-          />
-        )}
-      </div>
-    </div>
-  );
-}
-
 function Message({ id, img, name, lastMsg, time }) {
   const navigate = useNavigate();
   return (
@@ -102,8 +47,8 @@ function Message({ id, img, name, lastMsg, time }) {
       <img alt="Avatar" src={img} className={styles.img} />
       <div className={styles.msgBox} style={{ paddingLeft: "5px" }}>
         <p>{name}</p>
-        <p>
-          {lastMsg.slice(0, 12)} • {time}
+        <p className={styles["msg-info"]}>
+          {lastMsg.slice(0, 12)} | {time}
         </p>
       </div>
     </div>
@@ -182,7 +127,7 @@ function Add() {
         align="center"
       />
       {enable && (
-        <div>
+        <div className={styles["add-container"]}>
           <input
             type="text"
             onChange={handleChange}
@@ -197,8 +142,10 @@ function Add() {
             value={formValue.userId}
             placeholder="Enter participant ID"
           />
-          <button onClick={handleSubmit}>Add</button>
-          <button onClick={handleCancel}>Cancel</button>
+          <div>
+            <button onClick={handleSubmit}>Add</button>
+            <button onClick={handleCancel}>Cancel</button>
+          </div>
         </div>
       )}
     </div>

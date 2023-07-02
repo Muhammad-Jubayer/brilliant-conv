@@ -38,7 +38,7 @@ const Profile = () => {
       <div className={profileStyle["profile-container"]}>
         <img
           src={logo}
-          alt="Profile Picture"
+          alt="Profile"
           className={profileStyle["profile-picture"]}
         />
         <MdEdit onClick={handleEditClick} />

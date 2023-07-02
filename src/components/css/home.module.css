@@ -12,12 +12,19 @@
 }
 
 .msg p:first-child {
-  font-weight: 700;
+  font-weight: 600;
   padding: 0;
+}
+.msg p:last-child {
+  bottom: 5px;
 }
 
 .msg:hover {
   background-color: #00000020;
+}
+
+.msg-info {
+  font-size: 12px;
 }
 
 .container {
@@ -32,4 +39,28 @@
   background-color: #f1f1f1;
   border-radius: 50%;
   margin: 5px;
+}
+
+.add:hover {
+  background-color: #00000050;
+}
+
+.add-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300px;
+  transform: translate(-50%, -50%);
+  background-color: #00000010;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 5px;
+}
+
+.add-container input {
+  width: 90%;
 }

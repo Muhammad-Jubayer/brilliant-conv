@@ -14,7 +14,7 @@
 
 .message {
   padding: 10px 15px;
-  margin-bottom: 10px;
+  margin-top: 10px;
   border-radius: 10px;
   max-width: 70%;
 }
@@ -25,13 +25,13 @@
   color: white;
   position: relative;
   right: 0;
-  margin-left: auto; /* Added property */
+  margin-left: auto;
 }
 
 .other-user-message {
   align-self: flex-start;
   background-color: #f0f0f0;
-  margin-right: auto; /* Added property */
+  margin-right: auto;
 }
 
 .input-form {
@@ -44,6 +44,10 @@
   width: 100%;
   padding: 5px;
   padding-bottom: 10px;
+}
+
+.input-form:hover {
+  outline: none;
 }
 
 .input-form input {
@@ -62,4 +66,61 @@
   background-color: #0084ff;
   color: white;
   cursor: pointer;
+}
+
+.reaction-container {
+  display: flex;
+  background-color: lightblue;
+  padding: 10px;
+  margin: 8px 0 8px 0;
+  border-radius: 3px;
+  font-size: 30px;
+}
+
+.reactions {
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+
+.reactions::-webkit-scrollbar {
+  display: none;
+}
+
+.reactions span:hover {
+  font-size: 40px;
+}
+
+.active-reactions {
+  font-size: 20px;
+  background-color: #00000020;
+  padding: 5px;
+  border-radius: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.user-message-reaction {
+  margin-left: 60px;
+}
+
+.other-message-reaction {
+  margin-left: 220px;
+}
+
+.copy {
+  margin-right: 10px;
+  padding: 5px;
+  border-radius: 2px;
+}
+
+.copy:hover {
+  background-color: #fff;
+}
+
+.timestamp {
+  font-size: 11px;
+  position: relative;
+  bottom: 5px;
+  left: 30%;
 }
