@@ -1,5 +1,5 @@
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { getDatabase, ref as dbRef, set } from "firebase/database";
+import { getDatabase, ref as dbRef, set, push } from "firebase/database";
 
 const uploadImageToFirebase = (file, uploadTo, linkSetTo) => {
   const storage = getStorage();
@@ -20,4 +20,22 @@ const uploadImageToFirebase = (file, uploadTo, linkSetTo) => {
     .catch((error) => console.log(error));
 };
 
-export { uploadImageToFirebase };
+export function setData(path, data) {
+  try {
+    const db = getDatabase();
+    const pathRef = ref(db, path);
+    set(pathRef, data);
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+const pushData = (path, data) => {
+  const db = getDatabase();
+  const msgRef = dbRef(db, path);
+  const newMsgRef = push(msgRef);
+
+  set(newMsgRef, data);
+};
+
+export { uploadImageToFirebase, pushData };

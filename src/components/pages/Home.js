@@ -19,16 +19,22 @@ export default function Home() {
       <Header />
       <Add />
       {datac &&
-        Object.keys(datac).map((key) => (
-          <Message
-            key={datac[key].id}
-            img={logo}
-            name={datac[key].name}
-            lastMsg={"last message demo"}
-            time={formatTimestamp(datac[key]["timestamp"])}
-            id={datac[key].id}
-          />
-        ))}
+        Object.keys(datac).map((key) => {
+          const last =
+            datac[key]["lastMessage"]?.content.length >= 12
+              ? datac[key]["lastMessage"]?.content.slice(0, 12) + "..."
+              : datac[key]["lastMessage"]?.content;
+          return (
+            <Message
+              key={datac[key].id}
+              img={logo}
+              name={datac[key].name}
+              lastMsg={last}
+              time={formatTimestamp(datac[key]["lastMessage"]?.timestamp)}
+              id={datac[key].id}
+            />
+          );
+        })}
     </div>
   ) : (
     <div>
@@ -48,7 +54,7 @@ function Message({ id, img, name, lastMsg, time }) {
       <div className={styles.msgBox} style={{ paddingLeft: "5px" }}>
         <p>{name}</p>
         <p className={styles["msg-info"]}>
-          {lastMsg.slice(0, 12)} | {time}
+          {lastMsg} | {time}
         </p>
       </div>
     </div>

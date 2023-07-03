@@ -11,7 +11,8 @@ import {
   query,
   orderByChild,
 } from "firebase/database";
-import formatTimestamp, { copyText, setData } from "../../func";
+import formatTimestamp, { copyText } from "../../func";
+import { setData } from "../../firebaseUtils";
 import Loading from "../Loading";
 import { useAuth } from "../../contexts/AuthContext";
 
@@ -20,6 +21,7 @@ const ChatPage = () => {
   const { currentUser } = useAuth();
 
   const [messages, setMessages] = useState();
+  const [participants, setParticipants] = useState();
   const [inputValue, setInputValue] = useState("");
   const messageListRef = useRef(null);
 
@@ -29,8 +31,9 @@ const ChatPage = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (inputValue !== "") {
-      const db = getDatabase();
+    const db = getDatabase();
+
+    if (inputValue.length >= 2) {
       const msgRef = ref(db, `conversations/${id}/messages`);
       const newMsgRef = push(msgRef);
 
@@ -42,8 +45,24 @@ const ChatPage = () => {
       };
 
       set(newMsgRef, newMsg);
+      setData(`conversations/${id}/lastMessage`, inputValue);
       setInputValue("");
     }
+
+    Object.keys(participants).map((participant) => {
+      if (participants[participant]) {
+        set(
+          ref(db, `users/${participant}/conversations/${id}/lastMessage/content`),
+          inputValue
+        );
+        set(
+          ref(db, `users/${participant}/conversations/${id}/lastMessage/timestamp`),
+          new Date().toISOString()
+        );
+      }
+      return null;
+    });
+
     setTimeout(() => {
       if (messageListRef.current) {
         messageListRef.current.scrollTo({
@@ -58,7 +77,7 @@ const ChatPage = () => {
     setTimeout(() => {
       if (messageListRef.current) {
         messageListRef.current.scrollTo({
-          top: messageListRef.current.scrollHeight + 500,
+          top: messageListRef.current.scrollHeight,
           behavior: "smooth",
         });
       }
@@ -69,9 +88,16 @@ const ChatPage = () => {
       ref(db, `conversations/${id}/messages`),
       orderByChild("timestamp")
     );
+
+    // fetch messages
     onValue(msgs, (snapshot) => {
       setMessages(snapshot.val());
     });
+
+    // fetch participants
+    onValue(ref(db, `conversations/${id}/participants`), (snapshot) =>
+      setParticipants(snapshot.val())
+    );
   }, [id]);
 
   return (
@@ -144,7 +170,9 @@ const MessageContainer = ({
   const reactions = "👍👎� 😯😡😢😅🥰🤫🙁😵❤️� 🖤👌🤦";
   const reaction = Array.from(reactions);
 
-  const reactionClass = isUserMsg ? chatStyle["user-message-reaction"] : chatStyle["other-message-reaction"];
+  const reactionClass = isUserMsg
+    ? chatStyle["user-message-reaction"]
+    : chatStyle["other-message-reaction"];
 
   useEffect(() => {
     if (reactionObject) {

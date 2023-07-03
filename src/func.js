@@ -1,9 +1,8 @@
-import { getDatabase, ref, set } from "firebase/database";
 import clipboardy from "clipboardy";
 
 export function copyText(text) {
   clipboardy.writeSync(text);
-  console.log('Text copied to clipboard');
+  console.log("Text copied to clipboard");
 }
 
 export default function formatTimestamp(timestamp) {
@@ -56,18 +55,3 @@ export default function formatTimestamp(timestamp) {
     return `${formattedDate} at ${formatTime(targetDate)}`;
   }
 }
-
-
-export function setData(path, data) {
-try {
-	
-    const db = getDatabase();
-    const pathRef = ref(db, path);
-    set(pathRef, data);
-    }
-    catch (e) {
-     console.log(e)	
-    }
-    
-}
-
