@@ -3,9 +3,11 @@ import headerStyle from "./css/headerStyle.module.css";
 import { MdAccountCircle, MdSettings, MdLogout } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { useLocation } from "react-router-dom";
 import Demo from "../assets/images.jpeg";
 import useFetch from "../hooks/useFetch";
 import Logo from "../assets/b.png";
+
 
 const Header = () => {
   const { currentUser, logout } = useAuth();
@@ -19,12 +21,27 @@ const Header = () => {
 
   const navigate = useNavigate();
 
+  const loc = useLocation();
+
+  const currentRoute = loc.pathname;
+
+  let displayText = "";
+
+  if (currentRoute === "/") {
+    displayText = "Home";
+  } else {
+    const routeParts = currentRoute.split("/");
+    const routeName = routeParts[1].toLowerCase();
+    displayText = routeName.charAt(0).toUpperCase() + routeName.slice(1);
+  }
+
   return (
     <header className={headerStyle["header"]}>
       <div className={headerStyle["logo"]}>
-        <img src={Logo} alt="Logo" onClick={()=> navigate("/")} />
+        <img src={Logo} alt="Logo" onClick={() => navigate("/")} />
       </div>
-      <span>Chat</span>
+      
+      <span>{displayText}</span>
       <div className={headerStyle["user-profile"]}>
         <img
           onClick={toggleProfileInfo}

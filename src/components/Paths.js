@@ -1,13 +1,11 @@
 import { Routes, Route, Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
-// import Menu from "./pages/Menu";
 import Home from "./pages/Home";
 import { SignIn, SignUp, SignInButton, SignUpButton } from "./Authenticate";
 
 import Chat from "./pages/Chat.js";
 import Profile from "./pages/Profile";
-// import Messages from "./pages/Messages";
 
 export default function Paths() {
   const { currentUser } = useAuth();

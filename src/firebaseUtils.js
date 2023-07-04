@@ -23,7 +23,7 @@ const uploadImageToFirebase = (file, uploadTo, linkSetTo) => {
 export function setData(path, data) {
   try {
     const db = getDatabase();
-    const pathRef = ref(db, path);
+    const pathRef = dbRef(db, path);
     set(pathRef, data);
   } catch (e) {
     console.log(e);

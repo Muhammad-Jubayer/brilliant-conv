@@ -2,11 +2,11 @@ import React, { useState, useRef, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { MdCopyAll, MdSend } from "react-icons/md";
 import chatStyle from "../css/chatStyle.module.css";
+import { uuidv4 } from "@firebase/util";
 import {
   onValue,
   getDatabase,
   ref,
-  push,
   set,
   query,
   orderByChild,
@@ -32,36 +32,42 @@ const ChatPage = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const db = getDatabase();
+    const uuid = uuidv4();
 
     if (inputValue.length >= 2) {
-      const msgRef = ref(db, `conversations/${id}/messages`);
-      const newMsgRef = push(msgRef);
+      const msgRef = ref(db, `conversations/${id}/messages/${uuid}`);
 
       const newMsg = {
-        id: newMsgRef.key,
+        id: uuid,
         content: inputValue,
         senderId: currentUser.uid,
         timestamp: new Date().toISOString(),
       };
 
-      set(newMsgRef, newMsg);
-      setData(`conversations/${id}/lastMessage`, inputValue);
+      set(msgRef, newMsg);
+
+      Object.keys(participants).map((participant) => {
+        if (participants[participant]) {
+          set(
+            ref(
+              db,
+              `users/${participant}/conversations/${id}/lastMessage/content`
+            ),
+            inputValue
+          );
+          set(
+            ref(
+              db,
+              `users/${participant}/conversations/${id}/lastMessage/timestamp`
+            ),
+            new Date().toISOString()
+          );
+        }
+        return null;
+      });
+
       setInputValue("");
     }
-
-    Object.keys(participants).map((participant) => {
-      if (participants[participant]) {
-        set(
-          ref(db, `users/${participant}/conversations/${id}/lastMessage/content`),
-          inputValue
-        );
-        set(
-          ref(db, `users/${participant}/conversations/${id}/lastMessage/timestamp`),
-          new Date().toISOString()
-        );
-      }
-      return null;
-    });
 
     setTimeout(() => {
       if (messageListRef.current) {
@@ -182,6 +188,9 @@ const MessageContainer = ({
   }, [reactionObject]);
 
   const handleClick = (e) => {
+    console.log(
+      `conversations/${convId}/messages/${id}/reactions/${currentUser.uid}`
+    );
     setData(
       `conversations/${convId}/messages/${id}/reactions/${currentUser.uid}`,
       e.target.innerText
